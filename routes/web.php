@@ -11,6 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/quiz/create', function () {
+    return view('quiz.create');
+})->name('quiz.create');
+Route::get('/quiz/create', 'QuizController@create')->name('quiz.create');
+Route::post('/quiz', 'QuizController@store')->name('quiz.store');
+Route::post('/task', 'QuizController@store')->name('quiz.store');
