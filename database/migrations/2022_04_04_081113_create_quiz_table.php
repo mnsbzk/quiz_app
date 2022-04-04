@@ -13,7 +13,7 @@ class CreateQuizTable extends Migration
      */
     public function up()
     {
-        Schema::create('question', function (Blueprint $table) {
+        Schema::create('questions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('question_text');
             $table->timestamps();
@@ -28,6 +28,6 @@ class CreateQuizTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('question');
+        Schema::dropIfExists('questions');
     }
 }

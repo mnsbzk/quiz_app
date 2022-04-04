@@ -13,7 +13,7 @@ class CreateAnswerTable extends Migration
      */
     public function up()
     {
-        Schema::create('choice', function (Blueprint $table) {
+        Schema::create('choices', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('question_id');
             $table->string('choice_text_1');
@@ -36,6 +36,6 @@ class CreateAnswerTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('choice');
+        Schema::dropIfExists('choices');
     }
 }
