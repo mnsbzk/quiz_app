@@ -15,17 +15,20 @@ class QuizController extends Controller
         $this->question = $question;
     }
 
+    // 問題一覧表示の為のデータ取得
     public function index()
     {
         $questions = $this->question->all();
         return view('quiz.index', ['questions' => $questions]);
     }
 
+    // 問題作成画面遷移
     public function create()
     {
         return view('quiz.create');
     }
 
+    // 問題新規作成処理
     public function store(QuizRequest $request)
     {
         $inputs = $request->all();
@@ -34,18 +37,21 @@ class QuizController extends Controller
         return redirect()->route('quiz.index');
     }
 
+    // 問題詳細表示の為のデータ取得
     public function show($id)
     {
         $question = $this->question->find($id);
         return view('quiz.show', ['question' => $question]);
     }
 
+    // 問題更新画面遷移時のデータ取得
     public function edit($id)
     {
         $question = $this->question->find($id);
         return view('quiz.edit', ['question' => $question]);
     }
 
+    // 問題更新処理
     public function update(QuizRequest $request, $id)
     {
         $inputs = $request->all();
@@ -55,6 +61,7 @@ class QuizController extends Controller
         return redirect()->route('quiz.show', $question->id);
     }
 
+    // 問題削除処理（論理削除）
     public function delete($id)
     {
         $question = $this->question->find($id);
