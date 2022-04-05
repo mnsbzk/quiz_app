@@ -19,3 +19,5 @@ Route::get('/quiz/{id}', 'QuizController@show')->name('quiz.show');
 Route::get('/quiz/{id}/edit', 'QuizController@edit')->name('quiz.edit');
 Route::put('/quiz/{id}', 'QuizController@update')->name('quiz.update');
 Route::delete('/quiz/{id}', 'QuizController@delete')->name('quiz.delete');
+Route::post('/quiz/{id}','QuizController@StoreChoice')->name('choice.store');
+Route::get('/quiz/{id}', 'QuizController@IndexChoice')->name('choice.index');
