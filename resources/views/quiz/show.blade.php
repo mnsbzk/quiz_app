@@ -24,5 +24,16 @@
       </div>
     </div>
   </div>
+  <!-- 選択肢一覧 -->
+  @foreach ($choices as $choice)
+    <p>{{ $choice->choice_text }}</p>
+  @endforeach
+  <!-- 選択肢登録・更新フォーム -->
+  <form method="POST" action="{{ route('choice.store', $question->id) }}">
+    @csrf
+    <input type="checkbox" class="checkbox" name="is_correct" value="1">
+    <input type="text" class="form-control" name="choice_text" value="">
+    <button type="submit" class="btn btn-danger">登録</button>
+  </form>
 </div>
 @endsection
