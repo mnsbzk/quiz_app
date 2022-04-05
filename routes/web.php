@@ -11,9 +11,11 @@
 |
 */
 
-Route::get('/quiz/create', function () {
-    return view('quiz.create');
-})->name('quiz.create');
+
 Route::get('/quiz/create', 'QuizController@create')->name('quiz.create');
 Route::post('/quiz', 'QuizController@store')->name('quiz.store');
-Route::post('/task', 'QuizController@store')->name('quiz.store');
+Route::get('/quiz', 'QuizController@index')->name('quiz.index');
+Route::get('/quiz/{id}', 'QuizController@show')->name('quiz.show');
+Route::get('/quiz/{id}/edit', 'QuizController@edit')->name('quiz.edit');
+Route::put('/quiz/{id}', 'QuizController@update')->name('quiz.update');
+Route::delete('/quiz/{id}', 'QuizController@delete')->name('quiz.delete');
