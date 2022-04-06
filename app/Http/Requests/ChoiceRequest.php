@@ -24,7 +24,15 @@ class ChoiceRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'choice_text' => 'required|max:255'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'choice_text.required' => '選択肢が入力されていません。',
+            'choice_text.max' => '選択肢は :max 文字以内で入力してください。',
         ];
     }
 }
