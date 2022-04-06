@@ -15,6 +15,20 @@
               <input type="text" class="form-control" name="question_text" value="{{ $question->question_text }}">
             </div>
           </div>
+          <!-- 選択肢一覧 -->
+          <div>
+            @foreach ($choices as $choice)
+            <div>
+              <input type="hidden" name="choice_id[]" value="{{ $choice->id }}">
+              @if($choice->is_correct === 1)
+                <input type="checkbox" class="checkbox" name="is_correct[]" value="{{ $choice->id }}" checked>
+              @else
+              <input type="checkbox" class="checkbox" name="is_correct[]" value="{{ $choice->id }}">
+              @endif
+              <input type="text" name="choice_text[]" value="{{ $choice->choice_text }}">
+            </div>
+            @endforeach
+          </div>
           <div class="form-group row mb-0">
             <div class="col-md-6 offset-md-4">
               <button type="submit" class="btn btn-primary">更新</button>
