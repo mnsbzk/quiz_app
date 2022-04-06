@@ -7,6 +7,7 @@ use App\Choice;
 use Illuminate\Http\Request;
 use App\Http\Requests\QuizRequest;
 use App\Http\Requests\ChoiceRequest;
+use App\Http\Requests\EditRequest;
 
 class QuizController extends Controller
 {
@@ -41,27 +42,43 @@ class QuizController extends Controller
         return redirect()->route('quiz.index');
     }
 
-    // 問題詳細表示の為のデータ取得
+    // 問題詳細表示の為のデータ取得(問題データと選択肢一覧のデータ取得)
     public function show($id)
     {
         $question = $this->question->find($id);
-        return view('quiz.show', ['question' => $question]);
+        $choices = $this->choice->where('question_id', $id)->get();
+        return view('quiz.show', ['choices' => $choices,'question' => $question]);
     }
 
     // 問題更新画面遷移時のデータ取得
     public function edit($id)
     {
         $question = $this->question->find($id);
-        return view('quiz.edit', ['question' => $question]);
+        $choices = $this->choice->where('question_id', $id)->get();
+        return view('quiz.edit', ['question' => $question, 'choices' => $choices]);
     }
 
-    // 問題更新処理
-    public function update(QuizRequest $request, $id)
+    // 問題・選択肢更新処理
+    public function update(EditRequest $request, $id)
     {
+        // 問題更新
         $inputs = $request->all();
         $question = $this->question->find($id);
         $question->fill($inputs);
         $question->save();
+        // 選択肢更新
+        foreach($inputs['choice_id'] as $key=>$ChoiceId){
+            $ChoiceInputs = ['id'=>'0', 'question_id'=>$id, 'choice_text'=>'', 'is_correct'=>'0'];
+            $choice = $this->choice->find($ChoiceId);
+            $ChoiceInputs['id'] = $ChoiceId;
+            $ChoiceInputs['choice_text'] = $inputs['choice_text'][$key];
+            if(in_array($ChoiceId, $inputs['is_correct'])){
+                $ChoiceInputs['is_correct'] = '1';
+            }
+            $choice->fill($ChoiceInputs);
+            $choice->save();
+        }
+        
         return redirect()->route('quiz.show', $question->id);
     }
 
@@ -88,12 +105,20 @@ class QuizController extends Controller
         return redirect()->route('quiz.show', $QuestionId);
     }
 
-    // 選択肢一覧取得
-    public function IndexChoice($QuestionId)
+    // 選択肢削除処理（論理削除）
+    public function DeleteChoice($id)
     {
-        $choices = $this->choice->all($QuestionId);
-        $question = $this->question->find($QuestionId);
-        dd($choices);
-        return view('quiz.show', ['choices' => $choices,'question' => $question]);
+        $choice = $this->choice->find($id);
+        $QuestionId = $choice['question_id'];
+        $choice->delete();
+        return redirect()->route('quiz.show', $QuestionId);
     }
+
+    // // 選択肢一覧取得
+    // public function IndexChoice($QuestionId)
+    // {
+    //     $choices = $this->choice->where('question_id', $QuestionId)->get();
+    //     $question = $this->question->find($QuestionId);
+    //     return view('quiz.show', ['choices' => $choices,'question' => $question]);
+    // }
 }
