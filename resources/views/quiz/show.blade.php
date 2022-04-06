@@ -23,17 +23,33 @@
         </div>
       </div>
     </div>
+    <!-- 選択肢一覧 -->
+    <div>
+      @foreach ($choices as $choice)
+      <div class="list-group-item d-flex justify-content-around">
+        @if($choice->is_correct)
+          <p>正解</p>
+        @else
+          <p>不正解</p>
+        @endif
+        <p>{{ $choice->choice_text }}</p>
+        <form method="POST" action="{{ route('choice.delete', $choice->id) }}">
+          @method('delete')
+          @csrf
+          <button type="submit" class="btn btn-danger">削除する</button>
+        </form>
+      </div>
+      @endforeach
+    </div>
+    <!-- 選択肢登録フォーム -->
+    <div class="">
+      <form method="POST" action="{{ route('choice.store', $question->id) }}" class="d-flex">
+        @csrf
+        <input type="checkbox" class="checkbox" name="is_correct" value="1">
+        <input type="text" class="" name="choice_text" value="">
+        <button type="submit" class="btn btn-success">登録</button>
+      </form>
+    </div>
   </div>
-  <!-- 選択肢一覧 -->
-  @foreach ($choices as $choice)
-    <p>{{ $choice->choice_text }}</p>
-  @endforeach
-  <!-- 選択肢登録・更新フォーム -->
-  <form method="POST" action="{{ route('choice.store', $question->id) }}">
-    @csrf
-    <input type="checkbox" class="checkbox" name="is_correct" value="1">
-    <input type="text" class="form-control" name="choice_text" value="">
-    <button type="submit" class="btn btn-danger">登録</button>
-  </form>
 </div>
 @endsection
