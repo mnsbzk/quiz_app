@@ -22,3 +22,4 @@ Route::delete('/quiz/{id}', 'QuizController@delete')->name('quiz.delete');
 Route::post('/quiz/{id}/choice','QuizController@StoreChoice')->name('choice.store');
 Route::delete('/quiz/{id}/choice', 'QuizController@DeleteChoice')->name('choice.delete');
 Route::get('/test', 'TestController@index')->name('test.index');
+Route::post('/test', 'TestController@answer')->name('test.answer');
