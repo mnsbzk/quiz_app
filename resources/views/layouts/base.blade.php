@@ -26,7 +26,22 @@
     </nav>
     <main class="py-4">
       <div class="container">
-        @yield('content')
+
+      <!-- <div class="container">
+      <div class="row">
+        <div class="col-xs-4"> -->
+          <ul class="nav nav-pills nav-stacked">
+            <li class="active"><a href="/quiz">問題作成・編集</a></li>
+            <li><a href="/test">問題解答</a></li>
+          </ul>
+        <!-- </div> -->
+
+          @yield('content')
+
+      <!-- </div>
+      </div> -->
+
+
       </div>
     </main>
   </div>
