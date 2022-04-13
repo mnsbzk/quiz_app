@@ -1,8 +1,9 @@
 @extends('layouts.base')
 @section('content')
-<div class="row justify-content-center">
-  <div class="col-md-8">
-    <div class="card">
+<div class="question-layout justify-content-center">
+  <div class="">
+    @include('layouts.message')
+    <div class="card question-detail">
       <div class="card-header">
         問題詳細
       </div>
@@ -23,37 +24,46 @@
         </div>
       </div>
     </div>
-    <!-- 選択肢一覧 -->
-    <div class="card-header">
-        選択肢
-      <div class="choice_show">
+    <div class="card">
+      <div class="card-header">
+        選択肢詳細
+      </div>
+      <div class="d-flex justify-content-around choice-detail padding-right-150">
+        <p class="item">正誤</p>
+        <p class="item">選択肢内容</p>
+      </div>
         @foreach ($choices as $choice)
-          <div class="list-group-item d-flex justify-content-around">
+          <div class="d-flex justify-content-around choice-detail">
             @if($choice->is_correct)
-              <p>正解</p>
+              <p class="item">正解</p>
             @else
-              <p>不正解</p>
+              <p class="item">不正解</p>
             @endif
-            <p>{{ $choice->choice_text }}</p>
+            <p class="item">{{ $choice->choice_text }}</p>
             <form method="POST" action="{{ route('choice.delete', $choice->id) }}">
               @method('delete')
               @csrf
-              <button type="submit" class="btn btn-danger">削除する</button>
+              <button type="submit" class="btn btn-danger" class="item">削除する</button>
             </form>
           </div>
         @endforeach
+      <div class="">
+        <form method="POST" action="{{ route('choice.store', $question->id) }}" class="d-flex justify-content-center margin-top-bottom-20">
+          @csrf
+            <div class="d-flex">
+              <div>
+                <p>正誤</p>
+                <input type="checkbox" class="checkbox form-check-input customized-checkbox" name="is_correct" value="1" id="01-A">
+                <label for="01-A" class="checkbox01 show-chk"></label>
+              </div>
+              <div>
+                <p>選択肢内容</p>
+                <input type="text" class="text-box form-control" name="choice_text" value="">
+                <button type="submit" class="btn btn-success btn-registering">登録する</button>
+              </div>
+            </div>
+        </form>
       </div>
-    </div>
-    <!-- 選択肢登録フォーム -->
-    <div class="">
-      <form method="POST" action="{{ route('choice.store', $question->id) }}" class="d-flex justify-content-around">
-        @csrf
-        <div>
-          <input type="checkbox" class="checkbox" name="is_correct" value="1">
-          <input type="text" class="" name="choice_text" value="">
-        </div>
-        <button type="submit" class="btn btn-success">登録</button>
-      </form>
     </div>
   </div>
 </div>

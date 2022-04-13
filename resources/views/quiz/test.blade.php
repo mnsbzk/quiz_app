@@ -9,18 +9,23 @@
       </div>
       <div class="list-group list-group-flush">
       @foreach ($questions as $index => $question)
-        <input type="hidden" name="question_id[]" value="{{ $question->id }}">
-        <p>
-          Q{{ $index + 1 }}:{{ $question->question_text }}
-        </p>
-        @foreach ($question->choices as $choice)
-          <input type="hidden" name="choice_id[]" value="{{ $choice->id }}">
-          <label for=""><input type="checkbox" name="is_correct_{{$question->id}}[]" value="{{ $choice->id }}">{{ $choice->choice_text }}</label>
-        @endforeach
+        <div class="question-list">
+          <input type="hidden" name="question_id[]" value="{{ $question->id }}">
+          <p>
+            Q{{ $index + 1 }}:{{ $question->question_text }}
+          </p>
+          @foreach ($question->choices as $choice)
+            <div>
+              <input type="hidden" name="choice_id[]" value="{{ $choice->id }}">
+              <label for=""><input type="checkbox" name="is_correct_{{$question->id}}[]" value="{{ $choice->id }}">{{ $choice->choice_text }}</label>
+            </div>
+          @endforeach
+        </div>
       @endforeach
+        <button type="submit" class="btn btn-scoring btn-primary">採点する</button>
       </div>
     </div>
-    <button type="submit" class="btn btn-primary">採点する</button>
+    
   </form>
 </div>
 @endsection
