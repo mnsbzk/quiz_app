@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Question;
 use App\Choice;
+use App\Answer_Result;
 use Illuminate\Http\Request;
 
 class TestController extends Controller
@@ -11,10 +12,11 @@ class TestController extends Controller
     private $question;
     private $choice;
 
-    public function __construct(Question $question, Choice $choice)
+    public function __construct(Question $question, Choice $choice, Answer_Result $result)
     {
         $this->question = $question;
         $this->choice = $choice;
+        $this->result = $result;
     }
 
     // 問題・選択肢一覧表示
@@ -29,65 +31,93 @@ class TestController extends Controller
     {
         $questions = $this->question->all();
         $inputs = $request->all();
-        // dd($inputs);
-        $IsCorrectList = [];
-        $IsCorrectChoices = [];
-        $CheckedChoices = [];
-        $SavedCorrectAnswers = [];
+        // ユーザーが正解だった問題を記録する配列
+        $correctQuestionList = [];
+        // ユーザーが正解だった選択肢
+        $correctChoiceList = [];
+        // ユーザーがチェックした選択肢
+        $checkedChoiceList = [];
+        // 正解である選択肢を記録する配列
+        $correctAnswerList = [];
         foreach ($questions as $question)
         {
-            $UserAnswers = [];
-            if (array_key_exists('is_correct'. $question->id, $inputs))
-            {
-                $UserAnswers = $inputs['is_correct_'. $question->id];
-            }
-            $CorrectAnswers = [];
+            // 正解の選択肢を記録する配列
+            $correctChoices = [];
             foreach ($question->choices as $choice)
             {
                 // 正解の配列を作る処理
                 if($choice->is_correct === 1)
                 {
-                    $CorrectAnswers[] = $choice->id;
+                    $correctChoices[] = $choice->id;
                 }
 
+                // dd($inputs);
                 // 正当があっている選択肢の配列を作る処理
-                if ($choice->is_correct === 1)
+                if ($choice->is_correct)
                 {
-                    if (in_array($choice->id, $inputs['is_correct_'. $question->id]))
+                    if (isset($inputs['is_correct_'. $question->id]) && in_array($choice->id, $inputs['is_correct_'. $question->id]))
                     {
-                        $IsCorrectChoices[] = $choice->id;
+                        $correctChoiceList[] = $choice->id;
                     }
                 }
                 else
                 {
-                    if (in_array($choice->id, $inputs['is_correct_'. $question->id]) === false)
+                    if (isset($inputs['is_correct_'. $question->id]) && in_array($choice->id, $inputs['is_correct_'. $question->id]) === false)
                     {
-                        $IsCorrectChoices[] = $choice->id;
+                        $correctChoiceList[] = $choice->id;
+                    }
+                    elseif (!isset($inputs['is_correct_'. $question->id]))
+                    {
+                        $correctChoiceList[] = $choice->id;
                     }
                 }
-                
+
             }
 
-            if($UserAnswers == $CorrectAnswers)
+            // ユーザーの解答を記録する配列、チェックしたchoice_idの記録
+            $userIsCorrectChoices = [];
+            if (isset($inputs['is_correct_'. $question->id]))
             {
-                $IsCorrectList[] = $question->id;
+                foreach ($inputs['is_correct_'. $question->id] as $checked)
+                {
+                    $userIsCorrectChoices[] = $checked;
+                    $checkedChoiceList[] = $checked;
+                }
             }
 
-            // チェックしたchoice_idの記録
-            foreach ($inputs['is_correct_'. $question->id] as $cheked)
+            // 正解のquestion_idの記録
+            if($userIsCorrectChoices == $correctChoices)
             {
-                $CheckedChoices[] = $cheked;
+                $correctQuestionList[] = $question->id;
             }
 
             // 正解のchoice_idの記録
-            foreach ($CorrectAnswers as $CorrectAnswer)
+            foreach ($correctChoices as $correctChoice)
             {
-                $SavedCorrectAnswers[] = $CorrectAnswer;
+                $correctAnswerList[] = $correctChoice;
             }
         }
-        $CorrectCount = count($IsCorrectList);
-        $QuestionCount = count($inputs['question_id']);
-        // dd($CheckedChoices);
-        return view('quiz.answer',['IsCorrectList' => $IsCorrectList, 'CorrectCount' => $CorrectCount, 'QuestionCount' => $QuestionCount, 'questions' => $questions, 'IsCorrectChoices' => $IsCorrectChoices, 'CheckedChoices' => $CheckedChoices, 'SavedCorrectAnswers' => $SavedCorrectAnswers]);
+        
+        $correctCount = count($correctQuestionList);
+        $questionCount = count($inputs['question_id']);
+
+        // 解答結果保存
+        $resultInput = ['score' => $correctCount, 'questions' => $questionCount];
+        $this->result->fill($resultInput);
+        $this->result->save();
+
+        // 解答結果一覧取得
+        $results = $this->result->orderby('created_at')->get();
+
+        return view('quiz.answer', [
+            'correctQuestionList' => $correctQuestionList,
+            'correctCount' => $correctCount,
+            'questionCount' => $questionCount,
+            'questions' => $questions,
+            'correctChoiceList' => $correctChoiceList,
+            'checkedChoiceList' => $checkedChoiceList,
+            'correctAnswerList' => $correctAnswerList,
+            'results' => $results,
+        ]);
     }
 }

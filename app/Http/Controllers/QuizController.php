@@ -63,19 +63,20 @@ class QuizController extends Controller
     {
         // 問題更新
         $inputs = $request->all();
+        // dd($inputs);
         $question = $this->question->find($id);
         $question->fill($inputs);
         $question->save();
         // 選択肢更新
-        foreach($inputs['choice_id'] as $key=>$ChoiceId){
-            $ChoiceInputs = ['id'=>'0', 'question_id'=>$id, 'choice_text'=>'', 'is_correct'=>'0'];
-            $choice = $this->choice->find($ChoiceId);
-            $ChoiceInputs['id'] = $ChoiceId;
-            $ChoiceInputs['choice_text'] = $inputs['choice_text'][$key];
-            if(in_array($ChoiceId, $inputs['is_correct'])){
-                $ChoiceInputs['is_correct'] = '1';
+        foreach($inputs['choice_id'] as $key=>$choiceId){
+            $choiceInputs = ['id'=>'0', 'question_id'=>$id, 'choice_text'=>'', 'is_correct'=>'0'];
+            $choice = $this->choice->find($choiceId);
+            $choiceInputs['id'] = $choiceId;
+            $choiceInputs['choice_text'] = $inputs['choice_text'][$key];
+            if(in_array($choiceId, $inputs['is_correct'])){
+                $choiceInputs['is_correct'] = '1';
             }
-            $choice->fill($ChoiceInputs);
+            $choice->fill($choiceInputs);
             $choice->save();
         }
         
@@ -87,14 +88,19 @@ class QuizController extends Controller
     {
         $question = $this->question->find($id);
         $question->delete();
+        $choices = $this->choice->where('question_id', $id)->get();
+        foreach ($choices as $choice)
+        {
+            $choice->delete();
+        }
         return redirect()->route('quiz.index');
     }
 
     // 選択肢新規作成処理
-    public function StoreChoice(ChoiceRequest $request,$QuestionId)
+    public function StoreChoice(ChoiceRequest $request, $questionId)
     {
         $inputs = $request->all();
-        $inputs += array('question_id'=>$QuestionId);
+        $inputs += array('question_id'=>$questionId);
         if(array_key_exists('is_correct',$inputs) === false){
             $inputs += array('is_correct'=>'0');
         } else {
@@ -102,16 +108,16 @@ class QuizController extends Controller
         }
         $this->choice->fill($inputs);
         $this->choice->save();
-        return redirect()->route('quiz.show', $QuestionId);
+        return redirect()->route('quiz.show', $questionId);
     }
 
     // 選択肢削除処理（論理削除）
     public function DeleteChoice($id)
     {
         $choice = $this->choice->find($id);
-        $QuestionId = $choice['question_id'];
+        $questionId = $choice['question_id'];
         $choice->delete();
-        return redirect()->route('quiz.show', $QuestionId);
+        return redirect()->route('quiz.show', $questionId);
     }
 
     // // 選択肢一覧取得
