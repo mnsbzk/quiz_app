@@ -25,7 +25,8 @@ class EditRequest extends FormRequest
     {
         return [
             'question_text' => 'required|max:255',
-            'choice_text' => 'required|max:255',
+            'choice_text' => 'required|array',
+            'choice_text.*' => 'required|max:255',
             'is_correct' => 'required|array'
         ];
     }
@@ -35,8 +36,8 @@ class EditRequest extends FormRequest
         return [
             'question_text.required' => '問題が入力されていません。',
             'question_text.max' => '問題は :max 文字以内で入力してください。',
-            'choice_text.required' => '問題が入力されていません。',
-            'choice_text.max' => '問題は :max 文字以内で入力してください。',
+            'choice_text.*.required' => '選択肢が入力されていません。',
+            'choice_text.*.max' => '選択肢 :max 文字以内で入力してください。',
             'is_correct.required' => '正解の選択肢がありません。'
         ];
     }
