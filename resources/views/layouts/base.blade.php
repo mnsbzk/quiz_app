@@ -8,13 +8,14 @@
   <link rel="dns-prefetch" href="//fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <link rel="stylesheet" href="{{ asset('app.css') }}" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="{{asset('/css/ssskki.css')}}">
 </head>
 <body>
   <div id="app">
     <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
       <div class="container">
         <a class="navbar-brand" href="/quiz">Quiz</a>
+        
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -23,17 +24,16 @@
           <ul class="navbar-nav ml-auto"></ul>
         </div>
       </div>
+      <div>
+        <a class="menu" href="/quiz">問題作成・編集</a>
+        <a class="menu" href="/test">問題解答</a>
+      </div>
     </nav>
     <main class="py-4">
       <div class="container">
-
       <!-- <div class="container">
       <div class="row">
         <div class="col-xs-4"> -->
-          <ul class="nav nav-pills nav-stacked">
-            <li class="active"><a href="/quiz">問題作成・編集</a></li>
-            <li><a href="/test">問題解答</a></li>
-          </ul>
         <!-- </div> -->
 
           @yield('content')
