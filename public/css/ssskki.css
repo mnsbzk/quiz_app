@@ -1,0 +1,145 @@
+@charset "UTF-8";
+
+.choice_show {
+  margin-bottom: 20px;
+}
+
+.question-layout {
+  margin: 0 130px;
+}
+
+.question-list {
+  margin: 15px 20px;
+}
+
+.item {
+  width: calc(100% / 3);
+  text-align: center;
+}
+
+.separation {
+  height: 1px;
+  background-color: black;
+}
+
+.correct-answer-rate {
+  display: flex;
+  justify-content: flex-end;
+  padding:15px 50px 0 15px;
+}
+
+.margin-left-20 {
+  margin-left: 20px;
+}
+
+.padding {
+  padding-left: 10px;
+}
+
+.btn-scoring {
+  margin: 0 310px 20px;
+}
+
+.margin-top-bottom-20 {
+  margin: 20px 0;
+}
+
+.text-box {
+  width: 500px;
+  border: 1px solid rgba(0,0,0,.125);
+}
+
+.btn-registering {
+  margin-left: 20px;
+}
+
+.question-detail {
+  margin-bottom: 20px;
+}
+
+.edit-choice-text-box {
+  margin: 0 0 10px 10px;
+}
+
+.menu {
+  margin-left: 10px;
+  color: black;
+}
+
+.form-control {
+  display: inline;
+}
+
+.edit-choices {
+  margin-left: ;
+}
+
+.choice-detail {
+  border: 1px solid rgba(0,0,0,.125);
+  padding: 10px 0;
+}
+
+.customized-checkbox {
+  display: none;
+}
+.checkbox01 {
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-block;
+  padding: 5px 30px;
+  position: relative;
+  width: auto;
+}
+.checkbox01::before {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.125);
+  content: '';
+  display: block;
+  height: 25px;
+  left: 5px;
+  margin-top: -8px;
+  position: absolute;
+  top: 50%;
+  width: 25px;
+  border-radius: 3px;
+}
+.checkbox01::after {
+  border-right: 3px solid blue;
+  border-bottom: 3px solid blue;
+  content: '';
+  display: block;
+  height: 15px;
+  left: 12px;
+  margin-top: -7px;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  transform: rotate(45deg);
+  width: 10px;
+}
+.customized-checkbox:checked + .checkbox01::after {
+  opacity: 1;
+}
+
+.show-chk {
+  position: relative;
+  top: 8px;
+}
+
+.edit-chk {
+  position: relative;
+  top: 10px;
+}
+
+.padding-right-150 {
+  padding-right: 150px;
+}
+
+.margin-bottom-20 {
+  margin-bottom: 20px;
+}
+
+.half {
+  width: 50%;
+  text-align: center;
+}

@@ -13,17 +13,11 @@ class CreateAnswerTable extends Migration
      */
     public function up()
     {
-        Schema::create('choice', function (Blueprint $table) {
+        Schema::create('choices', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('question_id');
-            $table->string('choice_text_1');
-            $table->string('choice_text_2');
-            $table->string('choice_text_3');
-            $table->string('choice_text_4');
-            $table->boolean('is_correct_1');
-            $table->boolean('is_correct_2');
-            $table->boolean('is_correct_3');
-            $table->boolean('is_correct_4');
+            $table->string('choice_text');
+            $table->boolean('is_correct');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -36,6 +30,6 @@ class CreateAnswerTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('choice');
+        Schema::dropIfExists('choices');
     }
 }
